@@ -12,7 +12,8 @@
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "~5.0",
-        "illuminate/view": "~5.0"
+        "illuminate/view": "~5.0",
+        "twig/twig": "~1.18"
     },
     "autoload": {
         "psr-4": {

@@ -14,7 +14,8 @@ return [
 	*/
 
 	'extensions' => [
-		'Caffeinated\Sapling\Twig\Extensions\Auth'
+		'Caffeinated\Sapling\Twig\Extensions\Auth',
+		'Caffeinated\Sapling\Twig\Extensions\String',
 	],
 
 ];

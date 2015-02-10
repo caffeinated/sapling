@@ -1,9 +1,9 @@
 <?php
 namespace Caffeinated\Sapling\Twig\Extensions;
 
+use Illuminate\Auth\AuthManager;
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Illuminate\Auth\AuthManager;
 
 class Auth extends Twig_Extension
 {

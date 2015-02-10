@@ -15,6 +15,9 @@
         "illuminate/view": "~5.0",
         "twig/twig": "~1.18"
     },
+    "suggest": {
+        "laravelcollective/html": "HTML and Form Builders for the Laravel 5 Framework"
+    },
     "autoload": {
         "psr-4": {
             "Caffeinated\\Sapling\\": "src/Caffeinated/Sapling/"

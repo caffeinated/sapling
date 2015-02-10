@@ -4,6 +4,7 @@ namespace Caffeinated\Sapling;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\ViewServiceProvider;
+use InvalidArgumentException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
@@ -44,6 +45,8 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->registerViewFinder();
 
 		$this->registerFactory();
+
+		$this->bindCollectiveHtml();
 	}
 
 	/**
@@ -160,6 +163,24 @@ class SaplingServiceProvider extends ViewServiceProvider
 			}
 
 			$twig->addExtension($extension);
+		}
+	}
+
+	/**
+	 * Bind the Collective Html package to the IOC container.
+	 *
+	 * @return null|Collective\Html\FormBuilder
+	 */
+	public function bindCollectiveHtml()
+	{
+		if (class_exists('Collective\Html\FormBuilder')) {
+			$this->app->bind('Collective\Html\FormBuilder', function() {
+				return new \Collective\Html\FormBuilder(
+					$this->app->make('Collective\Html\HtmlBuilder'),
+					$this->app->make('Illuminate\Routing\UrlGenerator'),
+					csrf_token()
+				);
+			});
 		}
 	}
 }

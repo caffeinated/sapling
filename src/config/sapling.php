@@ -17,6 +17,8 @@ return [
 		'Caffeinated\Sapling\Twig\Extensions\Auth',
 		'Caffeinated\Sapling\Twig\Extensions\String',
 		'Caffeinated\Sapling\Twig\Extensions\Url',
+
+		// 'Caffeinated\Sapling\Twig\Extensions\Form',
 	],
 
 ];

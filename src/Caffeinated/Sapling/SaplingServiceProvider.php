@@ -5,8 +5,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\ViewServiceProvider;
 use InvalidArgumentException;
-use Twig_Loader_Filesystem;
 use Twig_Environment;
+use Twig_Lexer;
 
 class SaplingServiceProvider extends ViewServiceProvider
 {
@@ -83,10 +83,14 @@ class SaplingServiceProvider extends ViewServiceProvider
 	{
 		$paths = $this->app['config']['view.paths'];
 
-		$loader = new Twig_Loader_Filesystem($paths);
+		$loader = new Twig\Loader\Filesystem($paths);
 		$twig   = new Twig_Environment($loader);
 
-		$this->registerExtensions($twig);
+		$this->registerTwigExtensions($twig);
+
+		$lexer = $this->registerTwigDelimiters($twig);
+
+		$twig->setLexer($lexer);
 
 		$resolver->register('twig', function() use ($twig) {
 			return new Engines\TwigEngine($twig);
@@ -143,7 +147,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 	 * @param  Twig_Environment $twig
 	 * @return void
 	 */
-	public function registerExtensions($twig)
+	public function registerTwigExtensions($twig)
 	{
 		$extensions = $this->app['config']['sapling.extensions'];
 
@@ -164,6 +168,23 @@ class SaplingServiceProvider extends ViewServiceProvider
 
 			$twig->addExtension($extension);
 		}
+	}
+
+	/**
+	 * Register the Laravel Twig delimiters.
+	 *
+	 * @param  Twig_Environment $twig
+	 * @return Twig_Environment
+	 */
+	public function registerTwigDelimiters($twig)
+	{
+		$lexer = new Twig_Lexer($twig, [
+			'tag_comment'  => ['{#', '#}'],
+			'tag_block'    => ['{%', '%}'],
+			'tag_variable' => ['{{', '}}'], 
+		]);
+
+		return $lexer;
 	}
 
 	/**

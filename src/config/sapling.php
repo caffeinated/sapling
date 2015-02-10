@@ -1,6 +1,19 @@
 <?php
 
 return [
+
+	/*
+	|--------------------------------------------------------------------------
+	| Twig File Extension
+	|--------------------------------------------------------------------------
+	|
+	| If you wish, you may specify a custom file extension to use for your
+	| Twig templates. By default it is set to 'twig.php' to fall in line with
+	| Blade's 'blade.php'; another common extension is to simply use '.htm'
+	|
+	*/
+
+	'file_extension' => 'twig.php',
 	
 	/*
 	|--------------------------------------------------------------------------

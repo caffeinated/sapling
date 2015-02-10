@@ -1,0 +1,28 @@
+{
+    "name": "caffeinated/sapling",
+    "description": "Laravel 5 Twig Implementation",
+    "keywords": ["sapling", "twig", "laravel", "caffeinated"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shea Lewis",
+            "email": "shea.lewis89@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0",
+        "illuminate/view": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Caffeinated\\Sapling\\": "src/Caffeinated/Sapling/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

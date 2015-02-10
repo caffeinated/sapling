@@ -15,6 +15,7 @@ return [
 
 	'extensions' => [
 		'Caffeinated\Sapling\Twig\Extensions\Auth',
+		'Caffeinated\Sapling\Twig\Extensions\Config',
 		'Caffeinated\Sapling\Twig\Extensions\String',
 		'Caffeinated\Sapling\Twig\Extensions\Url',
 

@@ -1,12 +1,11 @@
 <?php
 namespace Caffeinated\Sapling;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\ViewServiceProvider;
-use InvalidArgumentException;
 use Twig_Environment;
-use Twig_Lexer;
+use Twig_Loader_Array;
+use Twig_Loader_Chain;
+
 
 class SaplingServiceProvider extends ViewServiceProvider
 {
@@ -27,6 +26,8 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->publishes([
 			__DIR__.'/../../config' => config_path('sapling.php')
 		], 'config');
+
+		$this->addFileExtension();
 	}
 
 	/**
@@ -40,151 +41,124 @@ class SaplingServiceProvider extends ViewServiceProvider
 			__DIR__.'/../../config/sapling.php', 'sapling'
 		);
 
-		$this->registerEngineResolver();
+		$this->bindTwigOptions();
 
-		$this->registerViewFinder();
+		$this->bindTwigLoaders();
 
-		$this->registerFactory();
+		$this->bindTwigEngine();
 
 		$this->bindCollectiveHtml();
 	}
 
-	/**
-	 * Register the engine resolver instance.
-	 *
-	 * @return void
-	 */
-	public function registerEngineResolver()
+	protected function bindTwigOptions()
 	{
-		$self = $this;
+		$this->app->bindIf('sapling.twig.fileextension', function() {
+			return $this->app['config']->get('sapling.file_extension');
+		});
 
-		$this->app['view.engine.resolver'] = $this->app->share(function() use ($self) {
-			$resolver = new EngineResolver;
+		$this->app->bindIf('sapling.twig.options', function() {
+			$options = $this->app['config']->get('sapling.environment_options', []);
 
-			// Next we will register the various engines with the resolver so that the
-			// environment can resolve the engines it needs for various views based
-			// on the extension of view files. We call a method for each engines.
-			foreach (array('php', 'blade', 'twig') as $engine)
-			{
-				$self->{'register'.ucfirst($engine).'Engine'}($resolver);
+			if (empty($options['cache'])) {
+				$options['cache'] = $this->app['path.storage'].'/views/twig';
 			}
 
-			return $resolver;
+			return $options;
+		});
+
+		$this->app->bindIf('sapling.twig.extensions', function() {
+			$load = $this->app['config']->get('sapling.extensions', []);
+
+			$options = $this->app['sapling.twig.options'];
+			$debug   = (bool) (isset($options['debug'])) ? $options['debug'] : false;
+
+			if ($debug) {
+				array_unshift($load, 'Twig_Extension_Debug');
+			}
+
+			return $load;
+		});
+
+		$this->app->bindIf('sapling.twig.lexer', function() {
+			return null;
 		});
 	}
 
-	/**
-	 * Register the Twig engine implementation.
-	 *
-	 * @param  \Illuminate\View\Engines\EngineResolver  $resolver
-	 * @return void
-	 */
-	public function registerTwigEngine($resolver)
+	protected function bindTwigLoaders()
 	{
-		$paths = $this->app['config']['view.paths'];
+		$this->app->bindIf('sapling.twig.templates', function() {
+			return [];
+		});
 
-		$loader = new Twig\Loader\Filesystem($paths);
-		$twig   = new Twig_Environment($loader);
+		$this->app->bindIf('sapling.twig.loader.array', function($app) {
+			return new Twig_Loader_Array($app['sapling.twig.templates']);
+		});
 
-		$this->registerTwigExtensions($twig);
+		$this->app->bindIf('sapling.twig.loader.viewfinder', function() {
+			return new Twig\Loader($this->app['files'], $this->app['view']->getFinder(), $this->app['sapling.twig.fileextension']);
+		});
 
-		$lexer = $this->registerTwigDelimiters($twig);
-
-		$twig->setLexer($lexer);
-
-		$resolver->register('twig', function() use ($twig) {
-			return new Engines\TwigEngine($twig);
+		$this->app->bindIf('sapling.twig.loader', function() {
+			return new Twig_Loader_Chain([
+				$this->app['sapling.twig.loader.array'],
+				$this->app['sapling.twig.loader.viewfinder']
+			]);
 		});
 	}
 
-	/**
-	 * Register the view finder implementation.
-	 *
-	 * @return void
-	 */
-	public function registerViewFinder()
+	protected function bindTwigEngine()
 	{
-		$this->app['view.finder'] = $this->app->share(function() {
-			$paths = $this->app['config']['view.paths'];
+		$this->app->bindIf('sapling.twig', function() {
+			$extensions = $this->app['sapling.twig.extensions'];
+			$lexer      = $this->app['sapling.twig.lexer'];
+			$twig       = new Twig\Instance($this->app['sapling.twig.loader'], $this->app['sapling.twig.options'], $this->app);
 
-			return new FileViewFinder($this->app['files'], $paths);
-		});
-	}
-
-	/**
-	 * Register the view environment.
-	 *
-	 * @return void
-	 */
-	public function registerFactory()
-	{
-		$self = $this;
-
-		$this->app['view'] = $this->app->share(function() use ($self) {
-			// Next we need to grab the engine resolver instance that will be used by the
-			// environment. The resolver will be used by an environment to get each of
-			// the various engine implementations such as plain PHP, Twig, or Blade.
-			$resolver = $this->app['view.engine.resolver'];
-
-			$finder = $this->app['view.finder'];
-
-			$env = new Factory($resolver, $finder, $this->app['events']);
-
-			// We will also set the container instance on this view environment since the
-			// view composers may be classes registered in the container, which allows
-			// for great testable, flexible composers for the application developer.
-			$env->setContainer($this->app);
-
-			$env->share('app', $this->app);
-
-			return $env;
-		});
-	}
-
-	/**
-	 * Register the Laravel Twig extensions.
-	 *
-	 * @param  Twig_Environment $twig
-	 * @return void
-	 */
-	public function registerTwigExtensions($twig)
-	{
-		$extensions = $this->app['config']['sapling.extensions'];
-
-		foreach ($extensions as $extension) {
-			if (is_string($extension)) {
-				try {
-					$extension = $this->app->make($extension);
-				} catch (\Exception $e) {
-					throw new InvalidArgumentException(
-						"Cannot instaniate Twig extension '{$extension}': ".$e->getMessage()
-					);
+			foreach ($extensions as $extension) {
+				if (is_string($extension)) {
+					try {
+						$extension = $this->app->make($extension);
+					} catch (Exception $e) {
+						throw new InvalidArgumentException(
+							"Cannot instantiate Twig extension '{$extension}': ".$e->getMessage()
+						);
+					}
+				} elseif (is_callable($extension)) {
+					$extension = $extension($this->app, $twig);
+				} elseif (! is_a($extension, 'Twig_Extension')) {
+					throw new InvalidArgumentException('Incorrect extension type');
 				}
-			} elseif (is_callable($extension)) {
-				$extension = $extension($this->app, $twig);
-			} elseif (! is_a($extension, 'Twig_Extension')) {
-				throw new InvalidArgumentException('Incorrect extension type');
+
+				$twig->addExtension($extension);
 			}
 
-			$twig->addExtension($extension);
-		}
+			if (is_a($lexer, 'Twig_LexerInterface')) {
+				$twig->setLexer($lexer);
+			}
+
+			return $twig;
+		}, true);
+
+		$this->app->alias('sapling.twig', 'Twig_Environment');
+		$this->app->alias('sapling.twig', 'Caffeinated\Sapling\Twig\Instance');
+
+		$this->app->bindIf('sapling.twig.compiler', function() {
+			return new Engines\Compiler($this->app['sapling.twig']);
+		});
+
+		$this->app->bindIf('sapling.twig.engine', function() {
+			return new Engines\TwigEngine(
+				$this->app['sapling.twig.compiler'],
+				$this->app['sapling.twig.loader.viewfinder'],
+				$this->app['config']->get('sapling.globals', [])
+			);
+		});
 	}
 
-	/**
-	 * Register the Laravel Twig delimiters.
-	 *
-	 * @param  Twig_Environment $twig
-	 * @return Twig_Environment
-	 */
-	public function registerTwigDelimiters($twig)
+	protected function addFileExtension()
 	{
-		$lexer = new Twig_Lexer($twig, [
-			'tag_comment'  => ['{#', '#}'],
-			'tag_block'    => ['{%', '%}'],
-			'tag_variable' => ['{{', '}}'], 
-		]);
-
-		return $lexer;
+		$this->app['view']->addExtension($this->app['sapling.twig.fileextension'], 'twig', function() {
+			return $this->app['sapling.twig.engine'];
+		});
 	}
 
 	/**
@@ -192,10 +166,10 @@ class SaplingServiceProvider extends ViewServiceProvider
 	 *
 	 * @return null|Collective\Html\FormBuilder
 	 */
-	public function bindCollectiveHtml()
+	protected function bindCollectiveHtml()
 	{
 		if (class_exists('Collective\Html\FormBuilder')) {
-			$this->app->bind('Collective\Html\FormBuilder', function() {
+			$this->app->bindIf('Collective\Html\FormBuilder', function() {
 				return new \Collective\Html\FormBuilder(
 					$this->app->make('Collective\Html\HtmlBuilder'),
 					$this->app->make('Illuminate\Routing\UrlGenerator'),
@@ -203,5 +177,26 @@ class SaplingServiceProvider extends ViewServiceProvider
 				);
 			});
 		}
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return [
+			'sapling.twig',
+			'sapling.twig.engine',
+			'sapling.twig.fileextension',
+			'sapling.twig.extensions',
+			'sapling.twig.options',
+			'sapling.twig.loader',
+			'sapling.twig.loader.array',
+			'sapling.twig.loader.path',
+			'sapling.twig.loader.viewfinder',
+			'sapling.twig.templates',
+		];
 	}
 }

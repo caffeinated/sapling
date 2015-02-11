@@ -1,20 +1,29 @@
 <?php
 namespace Caffeinated\Sapling\Engines;
 
-use Illuminate\View\Engines\EngineInterface;
-use Twig_Environment;
+use Caffeinated\Sapling\Twig\Loader;
+use ErrorException;
+use Illuminate\View\Engines\CompilerEngine;
+use Twig_Error;
 
-class TwigEngine implements EngineInterface
+class TwigEngine extends CompilerEngine
 {
+	protected $globalData = [];
+
+	protected $loader = [];
+
 	/**
 	 * Create a new instance of the Twig engine.
 	 *
 	 * @param  Twig_Envrionment $twig
 	 * @return void
 	 */
-	public function __construct(Twig_Environment $twig)
+	public function __construct(Compiler $compiler, Loader $loader, array $globalData = [])
 	{
-		$this->twig = $twig;
+		parent::__construct($compiler);
+
+		$this->loader     = $loader;
+		$this->globalData = $globalData;
 	}
 
 	/**
@@ -26,16 +35,30 @@ class TwigEngine implements EngineInterface
 	 */
 	public function get($path, array $data = array())
 	{
-		$paths = $this->twig->getLoader()->getPaths();
+		$data = array_merge($this->globalData, $data);
 
-		foreach ($paths as $searchPath) {
-			if (strpos($path, $searchPath) !== false) {
-				$path = substr($path, strlen($searchPath));
+		try {
+			return $this->compiler->load($path)->render($data);
+		} catch (Twig_Error $e) {
+			$this->handleTwigError($e);
+		}
+	}
 
-				break;
-			}
+	protected function handleTwigError($e)
+	{
+		$templateFile = $e->getTemplateFile();
+		$templateLine = $e->getTemplateLine();
+
+		if ($templateFile and file_exists($templateFile)) {
+			$file = $templateFile;
+		} elseif ($templateFile) {
+			$file = $this->loader->findTemplate($templateFile);
 		}
 
-		return $this->twig->loadTemplate($path)->render($data);
+		if (isset($file)) {
+			$e = new ErrorException($e->getMessage(), 0, 1, $file, $templateLine, $e);
+		}
+
+		throw $e;
 	}
 }

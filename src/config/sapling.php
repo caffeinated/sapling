@@ -14,6 +14,33 @@ return [
 	*/
 
 	'file_extension' => 'twig.php',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Twig Environmental Configurations
+	|--------------------------------------------------------------------------
+	|
+	*/
+
+	'environment' => [
+
+		'debug' => Config::get('app.debug', false),
+
+		'charset' => 'utf-8',
+
+		'base_template_class' => 'Caffeinated\Sapling\Twig\Template',
+
+		'cache' => null,
+
+		'auto_reload' => true,
+
+		'strict_variables' => false,
+
+		'autoescape' => true,
+
+		'optimization' => -1,
+
+	],
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -35,8 +62,8 @@ return [
 		'Caffeinated\Sapling\Twig\Extensions\Translator',
 		'Caffeinated\Sapling\Twig\Extensions\Url',
 
-		// 'Caffeinated\Sapling\Twig\Extensions\Form',
-		// 'Caffeinated\Sapling\Twig\Extensions\Html',
+		'Caffeinated\Sapling\Twig\Extensions\Form',
+		'Caffeinated\Sapling\Twig\Extensions\Html',
 	],
 
 ];

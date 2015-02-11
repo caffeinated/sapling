@@ -10,23 +10,48 @@ use Twig_Error_Loader;
 
 class TwigCompiler implements CompilerInterface
 {
+	/**
+	 * @var \Twig_Environment
+	 */
 	protected $twig;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param Twig_Environment $twig
+	 */
 	public function __construct(Twig_Environment $twig)
 	{
 		$this->twig = $twig;
 	}
 
+	/**
+	 * Return the Twig instance.
+	 *
+	 * @return Twig_Environment
+	 */
 	public function getTwig()
 	{
 		return $this->twig;
 	}
 
+	/**
+	 * Get the path to the compiled version of a view.
+	 *
+	 * @param  string  $path
+	 * @return string
+	 */
 	public function getCompiledPath($path)
 	{
 		return $this->twig->getCacheFilename($path);
 	}
 
+	/**
+	 * Determine if the given view is expired.
+	 *
+	 * @param  string  $path
+	 * @return bool
+	 */
 	public function isExpired($path)
 	{
 		$time = filemtime($this->getCompiledPath($path));
@@ -34,6 +59,12 @@ class TwigCompiler implements CompilerInterface
 		return $this->twig->isTemplateFresh($path, $time);
 	}
 
+	/**
+	 * Compile the view at the given path.
+	 *
+	 * @param  string  $path
+	 * @return void
+	 */
 	public function compile($path)
 	{
 		try {
@@ -43,10 +74,16 @@ class TwigCompiler implements CompilerInterface
 		}
 	}
 
-	public function load($path)
+	/**
+	 * Load the given template.
+	 *
+	 * @param  string  $name
+	 * @return Twig_TemplateInterface  A template instance representing the given template name
+	 */
+	public function load($name)
 	{
 		try {
-			$template = $this->twig->loadTemplate($path);
+			$template = $this->twig->loadTemplate($name);
 		} catch (Twig_Error_Loader $e) {
 			throw new InvalidArgumentException("Error in {$name}: ".$e->getMessage(), $e->getCode(), $e);
 		}

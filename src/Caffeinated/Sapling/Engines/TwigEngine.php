@@ -9,15 +9,22 @@ use Twig_Error;
 
 class TwigEngine extends CompilerEngine
 {
+	/**
+	 * @var array
+	 */
 	protected $globalData = [];
 
+	/**
+	 * @var array|\Caffeinated\Sapling\Twig\Loader
+	 */
 	protected $loader = [];
 
 	/**
-	 * Create a new instance of the Twig engine.
+	 * Constructor.
 	 *
-	 * @param  Twig_Envrionment $twig
-	 * @return void
+	 * @param TwigCompiler  $compiler
+	 * @param Loader        $loader
+	 * @param array         $globalData
 	 */
 	public function __construct(TwigCompiler $compiler, Loader $loader, array $globalData = [])
 	{
@@ -45,6 +52,12 @@ class TwigEngine extends CompilerEngine
 		}
 	}
 
+	/**
+	 * Handle a thrown Twig_Error exception.
+	 *
+	 * @param  Twig_Error $e
+	 * @return ErrorException
+	 */
 	protected function handleTwigError($e)
 	{
 		$templateFile = $e->getTemplateFile();

@@ -50,6 +50,11 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->bindCollectiveHtml();
 	}
 
+	/**
+	 * Bind all Sapling options to the IoC container for easy access.
+	 *
+	 * @return null
+	 */
 	protected function bindTwigOptions()
 	{
 		$this->app->bindIf('sapling.twig.fileextension', function() {
@@ -80,6 +85,11 @@ class SaplingServiceProvider extends ViewServiceProvider
 		});
 	}
 
+	/**
+	 * Bind Sapling loaders to the IoC container for easy access.
+	 *
+	 * @return null
+	 */
 	protected function bindTwigLoaders()
 	{
 		$this->app->bindIf('sapling.twig.templates', function() {
@@ -102,6 +112,11 @@ class SaplingServiceProvider extends ViewServiceProvider
 		});
 	}
 
+	/**
+	 * Bind Sapling Twig engine to the IoC container for easy access.
+	 *
+	 * @return null
+	 */
 	protected function bindTwigEngine()
 	{
 		$this->app->bindIf('sapling.twig', function() {
@@ -150,6 +165,11 @@ class SaplingServiceProvider extends ViewServiceProvider
 		});
 	}
 
+	/**
+	 * Add the configured twig file extension to the Laravel view component.
+	 *
+	 * @return null
+	 */
 	protected function addFileExtension()
 	{
 		$this->app['view']->addExtension($this->app['sapling.twig.fileextension'], 'twig', function() {
@@ -158,9 +178,9 @@ class SaplingServiceProvider extends ViewServiceProvider
 	}
 
 	/**
-	 * Bind the Collective Html package to the IOC container.
+	 * Bind the Collective Html package to the IoC container.
 	 *
-	 * @return null|Collective\Html\FormBuilder
+	 * @return null
 	 */
 	protected function bindCollectiveHtml()
 	{

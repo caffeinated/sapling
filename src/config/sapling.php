@@ -159,8 +159,8 @@ return [
 		'Caffeinated\Sapling\Twig\Extensions\Translator',
 		'Caffeinated\Sapling\Twig\Extensions\Url',
 
-		'Caffeinated\Sapling\Twig\Extensions\Form',
-		'Caffeinated\Sapling\Twig\Extensions\Html',
+		// 'Caffeinated\Sapling\Twig\Extensions\Form',
+		// 'Caffeinated\Sapling\Twig\Extensions\Html',
 	],
 
 ];

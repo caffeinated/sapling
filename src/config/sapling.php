@@ -24,19 +24,116 @@ return [
 
 	'environment' => [
 
-		'debug' => Config::get('app.debug', false),
+		/*
+		|----------------------------------------------------------------------
+		| Debug
+		|----------------------------------------------------------------------
+		|
+		| When set to true, the generated templates have a __toString() method
+		| that you can use to display the generated nodes.
+		|
+		| Default: false
+		|
+		*/
+
+		'debug' => false,
+
+		/*
+		|----------------------------------------------------------------------
+		| Charset
+		|----------------------------------------------------------------------
+		|
+		| The charset used by the templates.
+		|
+		| Default: utf-8
+		|
+		*/
 
 		'charset' => 'utf-8',
 
+		/*
+		|----------------------------------------------------------------------
+		| Charset
+		|----------------------------------------------------------------------
+		|
+		| The base template class to use for generated templates.
+		|
+		| Default: Caffeinated\Sapling\Twig\Template
+		|
+		*/
+
 		'base_template_class' => 'Caffeinated\Sapling\Twig\Template',
 
-		'cache' => null,
+		/*
+		|----------------------------------------------------------------------
+		| Cache
+		|----------------------------------------------------------------------
+		|
+		| An absolute path where to store the compiled templates, or false to
+		| disable caching.
+		|
+		| Default: false
+		|
+		*/
+
+		'cache' => false,
+
+		/*
+		|----------------------------------------------------------------------
+		| Auto Reload
+		|----------------------------------------------------------------------
+		|
+		| When developing with Twig, it's useful to recompile the template
+		| whenever the source code changes. If you don't provide a value for
+		| the auto_reload option, it will be determined automatically based on
+		| the debug value.
+		|
+		| Default: true
+		|
+		*/
 
 		'auto_reload' => true,
 
+		/*
+		|----------------------------------------------------------------------
+		| Strict Variables
+		|----------------------------------------------------------------------
+		|
+		| If set to false, Twig will silently ignore invalid variables
+		| (variables and or attributes/methods that do not exist) and replace
+		| them with a null value. When set to true, Twig throws an exception
+		| instead.
+		|
+		| Default: false
+		|
+		*/
+
 		'strict_variables' => false,
 
+		/*
+		|----------------------------------------------------------------------
+		| Autoescape
+		|----------------------------------------------------------------------
+		|
+		| If set to true, HTML auto-escaping will be enabled by default for all
+		| templates.
+		|
+		| Default: true
+		|
+		*/
+
 		'autoescape' => true,
+
+		/*
+		|----------------------------------------------------------------------
+		| Optimization
+		|----------------------------------------------------------------------
+		|
+		| A flag that indicates which optimizations to apply.
+		|
+		| Default: -1
+		|
+		*/
 
 		'optimization' => -1,
 

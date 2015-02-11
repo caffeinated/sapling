@@ -1,9 +1,10 @@
 <?php
 namespace Caffeinated\Sapling\Engines;
 
+use Caffeinated\Sapling\Compilers\TwigCompiler;
 use Caffeinated\Sapling\Twig\Loader;
-use ErrorException;
 use Illuminate\View\Engines\CompilerEngine;
+use ErrorException;
 use Twig_Error;
 
 class TwigEngine extends CompilerEngine
@@ -18,7 +19,7 @@ class TwigEngine extends CompilerEngine
 	 * @param  Twig_Envrionment $twig
 	 * @return void
 	 */
-	public function __construct(Compiler $compiler, Loader $loader, array $globalData = [])
+	public function __construct(TwigCompiler $compiler, Loader $loader, array $globalData = [])
 	{
 		parent::__construct($compiler);
 

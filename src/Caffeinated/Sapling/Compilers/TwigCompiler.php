@@ -1,14 +1,14 @@
 <?php
-namespace Caffeinated\Sapling\Engines;
+namespace Caffeinated\Sapling\Compilers;
 
 use Caffeinated\Sapling\Twig\Template;
-use Exception;
 use Illuminate\View\Compilers\CompilerInterface;
+use Exception;
 use InvalidArgumentException;
 use Twig_Environment;
 use Twig_Error_Loader;
 
-class Compiler implements CompilerInterface
+class TwigCompiler implements CompilerInterface
 {
 	protected $twig;
 

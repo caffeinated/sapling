@@ -59,11 +59,6 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->app->bindIf('sapling.twig.options', function() {
 			$options = $this->app['config']->get('sapling.environment_options', []);
 
-			// Seems to always cache and not reload the view during development
-			// if (empty($options['cache'])) {
-			// 	$options['cache'] = $this->app['path.storage'].'/views/twig';
-			// }
-
 			return $options;
 		});
 
@@ -112,7 +107,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->app->bindIf('sapling.twig', function() {
 			$extensions = $this->app['sapling.twig.extensions'];
 			$lexer      = $this->app['sapling.twig.lexer'];
-			$twig       = new Twig\Instance($this->app['sapling.twig.loader'], $this->app['sapling.twig.options'], $this->app);
+			$twig       = new Twig\Environment($this->app['sapling.twig.loader'], $this->app['sapling.twig.options'], $this->app);
 
 			foreach ($extensions as $extension) {
 				if (is_string($extension)) {
@@ -140,10 +135,10 @@ class SaplingServiceProvider extends ViewServiceProvider
 		}, true);
 
 		$this->app->alias('sapling.twig', 'Twig_Environment');
-		$this->app->alias('sapling.twig', 'Caffeinated\Sapling\Twig\Instance');
+		$this->app->alias('sapling.twig', 'Caffeinated\Sapling\Twig\Environment');
 
 		$this->app->bindIf('sapling.twig.compiler', function() {
-			return new Engines\Compiler($this->app['sapling.twig']);
+			return new Compilers\TwigCompiler($this->app['sapling.twig']);
 		});
 
 		$this->app->bindIf('sapling.twig.engine', function() {

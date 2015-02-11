@@ -72,7 +72,7 @@ return [
 		| An absolute path where to store the compiled templates, or false to
 		| disable caching.
 		|
-		| Default: false
+		| Options: false
 		|
 		*/
 

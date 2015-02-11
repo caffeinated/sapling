@@ -59,9 +59,10 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->app->bindIf('sapling.twig.options', function() {
 			$options = $this->app['config']->get('sapling.environment_options', []);
 
-			if (empty($options['cache'])) {
-				$options['cache'] = $this->app['path.storage'].'/views/twig';
-			}
+			// Seems to always cache and not reload the view during development
+			// if (empty($options['cache'])) {
+			// 	$options['cache'] = $this->app['path.storage'].'/views/twig';
+			// }
 
 			return $options;
 		});

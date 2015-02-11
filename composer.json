@@ -22,11 +22,5 @@
         "psr-4": {
             "Caffeinated\\Sapling\\": "src/Caffeinated/Sapling/"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    },
-    "minimum-stability": "dev"
+    }
 }

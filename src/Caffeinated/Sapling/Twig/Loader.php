@@ -4,7 +4,7 @@ namespace Caffeinated\Sapling\Twig;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\ViewFinderInterface;
 use InvalidArgumentException;
-use Twig_Error_loader;
+use Twig_Error_Loader;
 use Twig_ExistsLoaderInterface;
 use Twig_LoaderInterface;
 
@@ -65,7 +65,7 @@ class Loader implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
 		try {
 			$this->cache[$name] = $this->finder->find($name);
 		} catch (InvalidArgumentException $e) {
-			throw new Twig_Error_loader($e->getMessage());
+			throw new Twig_Error_Loader($e->getMessage());
 		}
 
 		return $this->cache[$name];

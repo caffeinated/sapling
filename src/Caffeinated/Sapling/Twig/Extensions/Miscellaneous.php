@@ -4,7 +4,7 @@ namespace Caffeinated\Sapling\Twig\Extensions;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
-class Helpers extends Twig_Extension
+class Miscellaneous extends Twig_Extension
 {
 	/**
      * Returns the name of the extension.
@@ -24,7 +24,9 @@ class Helpers extends Twig_Extension
 	public function getFunctions()
 	{
 		return [
+			new Twig_SimpleFunction('csrf_token', 'csrf_token'),
 			new Twig_SimpleFunction('dd', 'dd', ['is_safe' => ['html']]),
+			new Twig_SimpleFunction('elixir', 'elixir'),
 		];
 	}
 }

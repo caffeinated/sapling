@@ -153,8 +153,8 @@ return [
 	'extensions' => [
 		'Caffeinated\Sapling\Twig\Extensions\Auth',
 		'Caffeinated\Sapling\Twig\Extensions\Config',
-		'Caffeinated\Sapling\Twig\Extensions\Helpers',
 		'Caffeinated\Sapling\Twig\Extensions\Input',
+		'Caffeinated\Sapling\Twig\Extensions\Miscellaneous',
 		'Caffeinated\Sapling\Twig\Extensions\Session',
 		'Caffeinated\Sapling\Twig\Extensions\String',
 		'Caffeinated\Sapling\Twig\Extensions\Translator',

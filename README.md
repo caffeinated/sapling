@@ -21,7 +21,7 @@ composer require caffeinated/sapling=~1.0
 composer require caffeinated/sapling=~2.0
 ```
 
-Once this operation is complete, simply add both the service provider and facade classes to your project's `config/app.php` file:
+Once this operation is complete, simply add the service provider class to your project's `config/app.php` file:
 
 #### Laravel 5.0.x
 ```php

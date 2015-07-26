@@ -62,7 +62,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 		});
 
 		$this->app->bindIf('sapling.twig.options', function() {
-			$options = $this->app['config']->get('sapling.environment_options', []);
+			$options = $this->app['config']->get('sapling.environment', []);
 
 			return $options;
 		});
@@ -71,6 +71,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 			$load = $this->app['config']->get('sapling.extensions', []);
 
 			$options = $this->app['sapling.twig.options'];
+
 			$debug   = (bool) (isset($options['debug'])) ? $options['debug'] : false;
 
 			if ($debug) {

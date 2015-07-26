@@ -1,12 +1,12 @@
 <?php
 namespace Caffeinated\Sapling\Compilers;
 
-use Caffeinated\Sapling\Twig\Template;
-use Illuminate\View\Compilers\CompilerInterface;
 use Exception;
 use InvalidArgumentException;
 use Twig_Environment;
 use Twig_Error_Loader;
+use Caffeinated\Sapling\Twig\Template;
+use Illuminate\View\Compilers\CompilerInterface;
 
 class TwigCompiler implements CompilerInterface
 {

@@ -12,12 +12,17 @@ abstract class Template extends Twig_Template
 	protected $firedEvents = false;
 
 	/**
+	 * @var string
+	 */
+	protected $name = null;
+
+	/**
 	 * Displays the template with the given context.
 	 *
 	 * @param array $context An array of parameters to pass to the template
 	 * @param array $blocks  An array of blocks to pass to the template
 	 */
-	public function display(array $context, array $blocks = [])
+	public function display(array $context, array $blocks = array())
 	{
 		if ($this->shouldFireEvents()) {
 			$context = $this->fireEvents($context);
@@ -38,10 +43,11 @@ abstract class Template extends Twig_Template
 			return $context;
 		}
 
-		$env  = $context['__env'];
-		$view = new View($env, $env->getEngineResolver()->resolve('twig')), $this->getTemplateName(), null, $context);
+		$env      = $context['__env'];
+		$viewName = $this->name ?: $this->getTemplateName();
+		$view     = new View($env, $env->getEngineResolver()->resolve('twig'), $viewName, null, $context);
 		
-		$env->callCreate($view);
+		$env->callCreator($view);
 		$env->callComposer($view);
 
 		return $view->getData();
@@ -58,6 +64,17 @@ abstract class Template extends Twig_Template
 	}
 
 	/**
+	 * Set the firedEvents flag.
+	 *
+	 * @param  bool  $fired
+	 * @return void
+	 */
+	public function setFiredEvents($fired = true)
+	{
+		$this->firedEvents = $fired;
+	}
+
+	/**
 	 * Returns the attribute value for a given array/object.
 	 *
 	 * @param  mixed   $object             The object or array from where to get the item
@@ -69,7 +86,7 @@ abstract class Template extends Twig_Template
 	 * @return mixed                       The attribute value, or a Boolean when $isDefinedTest is true, or null when the attribute is not set and $ignoreStrictCheck is true
 	 * @throws Twig_Error_Runtime          If the attribute does not exist and Twig is running in strict mode and $isDefinedTest is false
 	 */
-	protected function getAttribute(oobject, $item, array $arguments = [], $type = 'Twig_Template::ANY_CALL', $isDefinedTest = false, $ignoreStrictCheck = false)
+	protected function getAttribute($object, $item, array $arguments = array(), $type = 'Twig_Template::ANY_CALL', $isDefinedTest = false, $ignoreStrictCheck = false)
 	{
 		if (is_a($object, 'Illuminate\Database\Eloquent\Model')) {
 			if (method_exists($object, $item)) {

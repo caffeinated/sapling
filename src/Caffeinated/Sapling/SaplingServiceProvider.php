@@ -81,6 +81,10 @@ class SaplingServiceProvider extends ViewServiceProvider
 			return $load;
 		});
 
+		$this->app->bindIf('sapling.twig.tags', function() {
+			return $this->app['config']->get('sapling.tags', []);
+		});
+
 		$this->app->bindIf('sapling.twig.lexer', function() {
 			return null;
 		});
@@ -122,6 +126,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 	{
 		$this->app->bindIf('sapling.twig', function() {
 			$extensions = $this->app['sapling.twig.extensions'];
+			$tags       = $this->app['sapling.twig.tags'];
 			$lexer      = $this->app['sapling.twig.lexer'];
 			$twig       = new Twig\Environment($this->app['sapling.twig.loader'], $this->app['sapling.twig.options'], $this->app);
 
@@ -141,6 +146,12 @@ class SaplingServiceProvider extends ViewServiceProvider
 				}
 
 				$twig->addExtension($extension);
+			}
+
+			if (! empty($tags)) {
+				foreach ($tags as $tag) {
+					$twig->addTokenParser(new $tag());
+				}
 			}
 
 			if (is_a($lexer, 'Twig_LexerInterface')) {

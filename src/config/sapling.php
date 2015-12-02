@@ -164,4 +164,19 @@ return [
 		// 'Caffeinated\Sapling\Twig\Extensions\Html',
 	],
 
+	/*
+	|--------------------------------------------------------------------------
+	| Register Twig Tags
+	|--------------------------------------------------------------------------
+	|
+	| Below you will find an array to register any additional custom tags as
+	| needed. These will be automatically registered for you to be used
+	| throughout your view files.
+	|
+	*/
+
+	'tags' => [
+		//
+	],
+
 ];

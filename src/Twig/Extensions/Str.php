@@ -56,7 +56,7 @@ class Str extends Twig_Extension
 			new Twig_SimpleFunction('starts_with', [$this->callback, 'startsWith']),
 			new Twig_SimpleFunction('str_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = Str::camel($name);
+				$name      = IlluminateStr::camel($name);
 
 				return call_user_func_array([$this->callback, $name], $arguments);
 			}),

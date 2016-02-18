@@ -156,7 +156,7 @@ return [
 		'Caffeinated\Sapling\Twig\Extensions\Input',
 		'Caffeinated\Sapling\Twig\Extensions\Miscellaneous',
 		'Caffeinated\Sapling\Twig\Extensions\Session',
-		'Caffeinated\Sapling\Twig\Extensions\String',
+		'Caffeinated\Sapling\Twig\Extensions\Str',
 		'Caffeinated\Sapling\Twig\Extensions\Translator',
 		'Caffeinated\Sapling\Twig\Extensions\Url',
 

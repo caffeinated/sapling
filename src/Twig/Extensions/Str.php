@@ -1,12 +1,12 @@
 <?php
 namespace Caffeinated\Sapling\Twig\Extensions;
 
-use Illuminate\Support\Str;
 use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
+use Illuminate\Support\Str as IlluminateStr;
 
-class String extends Twig_Extension
+class Str extends Twig_Extension
 {
 	/**
 	 * @var string|object
@@ -76,7 +76,7 @@ class String extends Twig_Extension
 			new Twig_SimpleFilter('studly_case', [$this->callback, 'studly']),
 			new Twig_SimpleFilter('str_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = Str::camel($name);
+				$name      = IlluminateStr::camel($name);
 
 				return call_user_func_array([$this->callback, $name], $arguments);
 			}),

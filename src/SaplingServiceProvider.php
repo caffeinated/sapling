@@ -37,7 +37,7 @@ class SaplingServiceProvider extends ViewServiceProvider
 	public function register()
 	{
 		$this->mergeConfigFrom(
-			__DIR__.'/../../config/sapling.php', 'sapling'
+			__DIR__.'/../config/sapling.php', 'sapling'
 		);
 
 		$this->registerAliases();
@@ -58,8 +58,8 @@ class SaplingServiceProvider extends ViewServiceProvider
 	 */
 	protected function registerAliases()
 	{
-		if (! $this->runningOnPHP7() and ! class_exists('Caffeinated/Sapling/Twig/Extensions/String')) {
-			class_alias('Caffeinated/Sapling/Twig/Extensions/Str', 'Caffeinated/Sapling/Twig/Extensions/String')
+		if (! $this->isRunningOnPHP7() and ! class_exists('Caffeinated/Sapling/Twig/Extensions/String')) {
+			class_alias('Caffeinated/Sapling/Twig/Extensions/Str', 'Caffeinated/Sapling/Twig/Extensions/String');
 		}
 	}
 

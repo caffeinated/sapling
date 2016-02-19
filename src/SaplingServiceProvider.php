@@ -40,8 +40,6 @@ class SaplingServiceProvider extends ViewServiceProvider
 			__DIR__.'/../config/sapling.php', 'sapling'
 		);
 
-		$this->registerAliases();
-
 		$this->bindTwigOptions();
 
 		$this->bindTwigLoaders();
@@ -49,18 +47,6 @@ class SaplingServiceProvider extends ViewServiceProvider
 		$this->bindTwigEngine();
 
 		$this->bindCollectiveHtml();
-	}
-
-	/**
-	 * Register aliases for classes due to conflicts with PHP 7.0.
-	 *
-	 * @return void
-	 */
-	protected function registerAliases()
-	{
-		if (! $this->isRunningOnPHP7() and ! class_exists('Caffeinated/Sapling/Twig/Extensions/String')) {
-			class_alias('Caffeinated/Sapling/Twig/Extensions/Str', 'Caffeinated/Sapling/Twig/Extensions/String');
-		}
 	}
 
 	/**
@@ -239,15 +225,5 @@ class SaplingServiceProvider extends ViewServiceProvider
 			'sapling.twig.loader.viewfinder',
 			'sapling.twig.templates',
 		];
-	}
-
-	/**
-	 * Check if application is running on PHP 7.
-	 *
-	 * @return bool
-	 */
-	protected function isRunningOnPHP7()
-	{
-		return version_compare(PHP_VERSION, '7.0-dev', '>=');
 	}
 }

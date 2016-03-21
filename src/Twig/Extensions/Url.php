@@ -2,7 +2,6 @@
 namespace Caffeinated\Sapling\Twig\Extensions;
 
 use Illuminate\Routing\UrlGenerator;
-use Illuminate\Support\Str;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -49,7 +48,7 @@ class Url extends Twig_Extension
 			new Twig_SimpleFunction('secure_asset', [$this->url, 'secureAsset'], ['is_safe' => ['html']]),
 			new Twig_SimpleFunction('url_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = Str::camel($name);
+				$name      = camel_case($name);
 
 				return call_user_func_array([$this->url, $name], $arguments);
 			}),

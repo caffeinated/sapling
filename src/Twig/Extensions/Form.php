@@ -2,7 +2,6 @@
 namespace Caffeinated\Sapling\Twig\Extensions;
 
 use Collective\Html\FormBuilder;
-use Illuminate\Support\Str;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -43,7 +42,7 @@ class Form extends Twig_Extension
 		return [
 			new Twig_SimpleFunction('form_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = Str::camel($name);
+				$name      = camel_case($name);
 
 				return call_user_func_array([$this->form, $name], $arguments);
 			}, ['is_safe' => ['html']]),

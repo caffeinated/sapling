@@ -2,7 +2,6 @@
 namespace Caffeinated\Sapling\Twig\Extensions;
 
 use Collective\Html\HtmlBuilder;
-use Illuminate\Support\Str;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -47,7 +46,7 @@ class Html extends Twig_Extension
 			new Twig_SimpleFunction('link_to_action', [$this->html, 'linkAction'], ['is_safe' => ['html']]),
 			new Twig_SimpleFunction('html_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = Str::camel($name);
+				$name      = camel_case($name);
 
 				return call_user_func_array([$this->html, $name], $arguments);
 			}, ['is_safe' => ['html']]),

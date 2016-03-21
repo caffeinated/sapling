@@ -4,7 +4,6 @@ namespace Caffeinated\Sapling\Twig\Extensions;
 use Twig_Extension;
 use Twig_SimpleFilter;
 use Twig_SimpleFunction;
-use Illuminate\Support\Str as IlluminateStr;
 
 class Str extends Twig_Extension
 {
@@ -56,7 +55,7 @@ class Str extends Twig_Extension
 			new Twig_SimpleFunction('starts_with', [$this->callback, 'startsWith']),
 			new Twig_SimpleFunction('str_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = IlluminateStr::camel($name);
+				$name      = camel_case($name);
 
 				return call_user_func_array([$this->callback, $name], $arguments);
 			}),
@@ -76,7 +75,7 @@ class Str extends Twig_Extension
 			new Twig_SimpleFilter('studly_case', [$this->callback, 'studly']),
 			new Twig_SimpleFilter('str_*', function($name) {
 				$arguments = array_slice(func_get_args(), 1);
-				$name      = IlluminateStr::camel($name);
+				$name      = camel_case($name);
 
 				return call_user_func_array([$this->callback, $name], $arguments);
 			}),

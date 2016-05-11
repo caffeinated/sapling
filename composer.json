@@ -13,7 +13,8 @@
         "php": ">=5.5.9",
         "illuminate/support": "5.1.*|5.2.*",
         "illuminate/view": "5.1.*|5.2.*",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "twig/extensions": "~1.0"
     },
     "suggest": {
         "laravelcollective/html": "HTML and Form Builders for the Laravel 5 Framework"

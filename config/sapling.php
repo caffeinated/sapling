@@ -13,7 +13,7 @@ return [
 	|
 	*/
 
-	'file_extension' => 'twig.php',
+	'file_extension' => 'twig',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -151,17 +151,25 @@ return [
 	*/
 
 	'extensions' => [
-		'Caffeinated\Sapling\Twig\Extensions\Auth',
-		'Caffeinated\Sapling\Twig\Extensions\Config',
-		'Caffeinated\Sapling\Twig\Extensions\Input',
-		'Caffeinated\Sapling\Twig\Extensions\Miscellaneous',
-		'Caffeinated\Sapling\Twig\Extensions\Session',
-		'Caffeinated\Sapling\Twig\Extensions\Str',
-		'Caffeinated\Sapling\Twig\Extensions\Translator',
-		'Caffeinated\Sapling\Twig\Extensions\Url',
+		// Twig Extensions
+		\Twig_Extensions_Extension_Text::class,
+		\Twig_Extensions_Extension_I18n::class,
+		\Twig_Extensions_Extension_Array::class,
+		\Twig_Extensions_Extension_Date::class,
 
-		// 'Caffeinated\Sapling\Twig\Extensions\Form',
-		// 'Caffeinated\Sapling\Twig\Extensions\Html',
+		// Caffeinated Extensions
+		\Caffeinated\Sapling\Twig\Extensions\Auth::class,
+		\Caffeinated\Sapling\Twig\Extensions\Config::class,
+		\Caffeinated\Sapling\Twig\Extensions\Input::class,
+		\Caffeinated\Sapling\Twig\Extensions\Miscellaneous::class,
+		\Caffeinated\Sapling\Twig\Extensions\Session::class,
+		\Caffeinated\Sapling\Twig\Extensions\Str::class,
+		\Caffeinated\Sapling\Twig\Extensions\Translator::class,
+		\Caffeinated\Sapling\Twig\Extensions\Url::class,
+
+		// Laravel Collective HTML & Forms Extensions
+		// \Caffeinated\Sapling\Twig\Extensions\Form::class,
+		// \Caffeinated\Sapling\Twig\Extensions\Html::class,
 	],
 
 	/*
